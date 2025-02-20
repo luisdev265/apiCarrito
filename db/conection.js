@@ -3,10 +3,11 @@ const mysql = require('mysql2/promise'); // <-- Usa la versión promisificada
 const connectDB = async () => {
     try {
         const connection = await mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: '', // Asegúrate de que la contraseña es correcta
-            database: 'carrito'
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD, // Asegúrate de que la contraseña es correcta
+            database: process.env.DB_NAME,
+            port: process.env.DB_PORT
         });
 
         console.log('🟢 Conectado a la base de datos');
