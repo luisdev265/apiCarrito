@@ -1,41 +1,46 @@
-require('dotenv').config();
-const cors = require('cors');
-const express = require('express');
+require("dotenv").config();
+const cors = require("cors");
+const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
-const mongoose = require('mongoose');
+const connectDB = require("./db/conection");
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/', (req, res) => {
-    console.log(req.body);
-    res.send('Received');
+app.post("/", async (req, res) => {
+  try {
+
+    const {movimiento} = req.body;
+
+    if (!movimiento) {
+      return res.status(400).json({ msg: "Faltan datos" });
+    }
+
+    const conection = await connectDB();
+    const query = "INSERT INTO movimientos (movimiento) VALUES (?)";
+
+    await conection.query(query, [movimiento]);
+
+    res.status(201).json({ msg: "Movimiento registrado" });
+
+  }catch (error) {
+    res.status(500).json({ msg: "Error al conectar a la base de datos", ERROR: error.message });
+
+  }
 });
 
-const MONGO_URI = process.env.MONGO_URI;
-
-const connectDB = async () => {
-    try {
-        await mongoose.connect(MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        console.log("MongoDB connected");
-
-    } catch (error) {
-        console.log("Error al conectar a la base de datos:", error);
-        process.exit(1);
-    }
-}
-
-app.get('/', (req, res) => {
-    res.send("Hello world");
+app.get("/", async (req, res) => {
+  try {
+    const conection = await connectDB();
+    const [rows] = await conection.execute("SELECT * FROM movimientos");
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ msg: "Error al conectar a la base de datos" });
+  }
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
-
-connectDB();
