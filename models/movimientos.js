@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
   router.get("/", async (req, res) => {
     try {
       const conection = await connectDB();
-      const [rows] = await conection.execute("SELECT * FROM movimientos");
+      const [rows] = await conection.execute("SELECT id, DATE_FORMAT(fechaYhora, '%Y-%m-%d') AS fecha, TIME_FORMAT(fechaYhora, '%H:%i:%s') AS hora, movimiento FROM movimientos");
       res.json(rows);
     } catch (error) {
       res.status(500).json({ msg: "Error al conectar a la base de datos" });
