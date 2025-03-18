@@ -45,26 +45,6 @@ router.post("/", async (req, res) => {
     }
   });
 
-  //GET Ultimo movimiento
-router.get("/ultimo", async (req, res) => {
-  let connection;
-  try {
-    const pool = await connectDB();
-    connection = await pool.getConnection();
-    const [rows] = await connection.execute(
-      "SELECT movimiento FROM movimientos ORDER BY id DESC LIMIT 1"
-    );
 
-    if (rows.length === 0) {
-      return res.status(404).json({ msg: "No se encontraron movimientos" });
-    }
-    
-    res.json(rows);
-  } catch (error) {
-    res.status(500).json({ msg: "Error al conectar a la base de datos" });
-  } finally {
-    if (connection) connection.release();
-  }
-});
 
   module.exports = router;
