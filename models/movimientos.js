@@ -52,7 +52,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/delete", async (req, res) => {
   try {
     
     const conection = await connectDB();
