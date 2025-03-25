@@ -28,7 +28,7 @@ router.put('/', async (req, res) => {
         }
 
         const conection = await connectDB();
-        const query = 'UPDATE distancia SET distancia =? WHERE id =?';
+        const query = 'UPDATE distancia SET distancia =? WHERE id_distancia =?';
         const [result] = await conection.query(query, [distancia, id]);
 
         if (result.affectedRows === 0) {
