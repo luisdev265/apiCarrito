@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
       return res.status(404).json({ msg: 'No se encontraron velocidades registradas' }); 
     }
 
-    res.json(rows); 
+    res.status(201).json(rows); 
   }catch (error) {
     res.status(500).json({ msg: 'Error al obtener las velocidades', error: error.message });
   }
